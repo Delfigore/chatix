@@ -78,7 +78,7 @@ export default function Feed() {
   if (isCheckingAuth) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
       </div>
     )
   }
@@ -94,7 +94,7 @@ export default function Feed() {
         <TweetForm />
         {isLoading ? (
           <div className="flex justify-center items-center h-32">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
           </div>
         ) : error ? (
           <div className="flex flex-col items-center justify-center h-32 text-gray-500">
@@ -102,7 +102,7 @@ export default function Feed() {
             <p>{error}</p>
             <button
               onClick={fetchTweets}
-              className="mt-4 flex items-center text-primary hover:underline"
+              className="mt-4 flex items-center text-blue-500 hover:underline"
             >
               <RefreshCcw className="h-4 w-4 mr-2" />
               Try again

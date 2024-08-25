@@ -1,38 +1,35 @@
-import { Search } from 'lucide-react'
+import React from 'react';
 
-export default function TrendingSection() {
+const TrendingSection: React.FC = () => {
+  const trendingTopics = [
+    { name: '#ChatixLaunch', posts: '97K' },
+    { name: '#TechNews', posts: '80K' },
+    { name: '#WebDev', posts: '64K' },
+    { name: '#AI', posts: '55K' },
+    { name: '#Innovation', posts: '42K' },
+  ];
+
   return (
-    <aside className="hidden lg:flex flex-col w-80 h-screen sticky top-0 p-4 bg-white shadow-md">
-      <div className="mb-6">
-        <div className="relative">
-          <input
-            type="text"
-            placeholder="Search Chatix"
-            className="w-full pl-10 pr-4 py-2 border rounded-full focus:outline-none focus:border-blue-500"
-          />
-          <Search className="absolute left-3 top-2.5 text-gray-400" size={20} />
-        </div>
-      </div>
-      <div>
-        <h2 className="text-xl font-semibold mb-4">Trending</h2>
-        <ul className="space-y-4">
-          <li>
-            <a href="#" className="text-blue-500 hover:underline">#ChatixLaunch</a>
-          </li>
-          <li>
-            <a href="#" className="text-blue-500 hover:underline">#TechNews</a>
-          </li>
-          <li>
-            <a href="#" className="text-blue-500 hover:underline">#WebDev</a>
-          </li>
-          <li>
-            <a href="#" className="text-blue-500 hover:underline">#AI</a>
-          </li>
-          <li>
-            <a href="#" className="text-blue-500 hover:underline">#Innovation</a>
-          </li>
-        </ul>
-      </div>
-    </aside>
-  )
-}
+    <div className="bg-gray-100 rounded-lg p-4">
+      <h2 className="text-xl font-bold mb-4">Trending</h2>
+      <ul>
+        {trendingTopics.map((topic, index) => {
+          if (!topic) throw new Error('Trending topic is null or undefined');
+          if (!topic.name) throw new Error('Trending topic name is null or undefined');
+          if (!topic.posts) throw new Error('Trending topic posts is null or undefined');
+
+          return (
+            <li key={index} className="mb-3">
+              <a href="#" className="hover:underline">
+                <div className="font-bold">{topic.name}</div>
+                <div className="text-sm text-gray-500">{topic.posts} posts</div>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+};
+
+export default TrendingSection;

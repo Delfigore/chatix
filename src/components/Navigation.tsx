@@ -8,7 +8,7 @@ import { clearUser } from '@/store/slices/authSlice'
 import { supabase } from '@/lib/supabase'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import * as Avatar from '@radix-ui/react-avatar'
-import { Bell, Home, User, LogOut, Search, MessageCircle, Bookmark, Hash } from 'lucide-react'
+import { Bell, Home, User, LogOut, Search, MessageCircle } from 'lucide-react'
 import { useMemo, useCallback } from 'react'
 
 export default function Navigation() {
@@ -27,18 +27,17 @@ export default function Navigation() {
     { href: '/search', icon: <Search size={24} />, label: 'Explore' },
     { href: '/notifications', icon: <Bell size={24} />, label: 'Notifications' },
     { href: '/messages', icon: <MessageCircle size={24} />, label: 'Messages' },
-    { href: '/bookmarks', icon: <Bookmark size={24} />, label: 'Bookmarks' },
     ...(user ? [{ href: `/profile/${user.id}`, icon: <User size={24} />, label: 'Profile' }] : []),
   ], [user])
 
   const userAvatar = useMemo(() => (
-    <Avatar.Root className="bg-gray-300 inline-flex h-10 w-10 select-none items-center justify-center overflow-hidden rounded-full align-middle">
+    <Avatar.Root className="bg-gray-300 inline-flex h-8 w-8 select-none items-center justify-center overflow-hidden rounded-full align-middle">
       <Avatar.Image
         className="h-full w-full rounded-full object-cover"
         src={user?.user_metadata.avatar_url || "https://github.com/shadcn.png"}
         alt={user?.user_metadata.full_name || "User avatar"}
       />
-      <Avatar.Fallback className="text-gray-900 leading-1 flex h-full w-full items-center justify-center bg-gray-300 text-base font-medium" delayMs={600}>
+      <Avatar.Fallback className="text-gray-900 leading-1 flex h-full w-full items-center justify-center bg-gray-300 text-sm font-medium" delayMs={600}>
         {(user?.user_metadata.full_name || "User")[0].toUpperCase()}
       </Avatar.Fallback>
     </Avatar.Root>
@@ -46,11 +45,6 @@ export default function Navigation() {
 
   return (
     <nav className="flex flex-col h-full">
-      <div className="p-4">
-        <Link href="/" className="text-primary hover:text-primary/80 transition-colors duration-200">
-          <Hash size={28} />
-        </Link>
-      </div>
       <div className="flex-1">
         {navLinks.map((link) => (
           <NavLink key={link.href} href={link.href} icon={link.icon}>{link.label}</NavLink>
@@ -61,7 +55,7 @@ export default function Navigation() {
           <DropdownMenu.Root>
             <DropdownMenu.Trigger className="flex items-center space-x-2 p-2 rounded-full hover:bg-gray-200 transition-colors duration-200">
               {userAvatar}
-              <span className="font-bold text-sm">{user.user_metadata.full_name || "User"}</span>
+              <span className="font-medium text-sm">{user.user_metadata.full_name || "User"}</span>
             </DropdownMenu.Trigger>
 
             <DropdownMenu.Portal>
@@ -80,10 +74,10 @@ export default function Navigation() {
           </DropdownMenu.Root>
         ) : (
           <div className="space-y-2">
-            <Link href="/login" className="block w-full text-center bg-primary text-white px-4 py-2 rounded-full font-bold hover:bg-primary/90 transition-colors duration-200">
+            <Link href="/login" className="block w-full text-center bg-blue-500 text-white px-4 py-2 rounded-full font-bold hover:bg-blue-600 transition-colors duration-200">
               Login
             </Link>
-            <Link href="/signup" className="block w-full text-center bg-white text-primary border border-primary px-4 py-2 rounded-full font-bold hover:bg-gray-50 transition-colors duration-200">
+            <Link href="/signup" className="block w-full text-center bg-white text-blue-500 border border-blue-500 px-4 py-2 rounded-full font-bold hover:bg-gray-50 transition-colors duration-200">
               Sign Up
             </Link>
           </div>

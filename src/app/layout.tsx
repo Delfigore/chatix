@@ -12,8 +12,12 @@ const Navigation = dynamic(() => import('@/components/Navigation'), {
   loading: () => <p>Loading...</p>,
 })
 
+const TrendingSection = dynamic(() => import('@/components/TrendingSection'), {
+  loading: () => <p>Loading trending...</p>,
+})
+
 export const metadata = {
-  title: 'Twitter Clone',
+  title: 'Chatix',
   description: 'A modern Twitter-like application',
 }
 
@@ -35,27 +39,44 @@ export default function RootLayout({
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
-      <body className={`${inter.className} bg-extra-extra-light-gray min-h-screen`}>
+      <body className={`${inter.className} bg-white min-h-screen`}>
         <Providers>
           <ErrorBoundary>
             <div className="flex min-h-screen">
-              <aside className="w-64 border-r border-extra-light-gray" aria-label="Sidebar navigation">
+              {/* Left sidebar */}
+              <aside className="w-64 border-r border-gray-200" aria-label="Sidebar navigation">
                 <div className="fixed h-screen p-4">
                   <div className="mb-4">
-                    <Image src="/logo.jpg" alt="Logo" width={50} height={50} priority />
+                    <h1 className="text-2xl font-bold">Chatix</h1>
                   </div>
                   <Suspense fallback={<p>Loading navigation...</p>}>
                     <Navigation />
                   </Suspense>
                 </div>
               </aside>
-              <main className="flex-1 ml-64">
-                <div className="max-w-2xl mx-auto mt-4 px-4 py-8">
+
+              {/* Main content */}
+              <main className="flex-1 border-r border-gray-200">
+                <div className="max-w-2xl mx-auto px-4 py-4">
                   <Suspense fallback={<Loading />}>
                     {children}
                   </Suspense>
                 </div>
               </main>
+
+              {/* Right sidebar */}
+              <aside className="w-80 p-4">
+                <div className="mb-4">
+                  <input
+                    type="text"
+                    placeholder="Search Chatix"
+                    className="w-full px-4 py-2 rounded-full bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                <Suspense fallback={<p>Loading trending...</p>}>
+                  <TrendingSection />
+                </Suspense>
+              </aside>
             </div>
           </ErrorBoundary>
         </Providers>
