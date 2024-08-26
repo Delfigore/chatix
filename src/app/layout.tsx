@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import { Suspense, lazy } from 'react'
 import ErrorBoundary from '@/components/ErrorBoundary'
+import Link from 'next/link'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -51,7 +52,9 @@ export default function RootLayout({
               <aside className="w-full md:w-64 border-b md:border-r border-gray-200" aria-label="Sidebar navigation">
                 <div className="md:fixed md:h-screen p-4">
                   <div className="mb-4">
-                    <h1 className="text-2xl font-bold">Chatix</h1>
+                    <Link href="/feed" className="inline-block">
+                      <h1 className="text-2xl font-bold hover:text-blue-500 transition-colors duration-200">Chatix</h1>
+                    </Link>
                   </div>
                   <Suspense fallback={<p>Loading navigation...</p>}>
                     <Navigation />
