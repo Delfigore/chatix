@@ -1,16 +1,15 @@
 'use client'
 
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
-import { setUser } from '@/store/slices/authSlice'
 import { User as SupabaseUser } from '@supabase/auth-js'
 import { User as ReduxUser } from '@/store/slices/authSlice'
 
 export interface User extends SupabaseUser {
   // Add any additional properties you need
 }
+
 const transformUser = (user: User | null): ReduxUser | null => {
   if (!user) return null;
   return {
@@ -23,7 +22,7 @@ const transformUser = (user: User | null): ReduxUser | null => {
 export default function Signup() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const dispatch = useDispatch()
+  const [message, setMessage] = useState('')
   const router = useRouter()
 
   const handleSignup = async (e: React.FormEvent) => {
@@ -32,14 +31,15 @@ export default function Signup() {
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+        },
       })
       if (error) throw error
-      const transformedUser = transformUser(data.user as User)
-      dispatch(setUser(transformedUser))
-      router.push('/feed')
+      setMessage('Please check your email for the confirmation link.')
     } catch (error) {
       console.error('Error signing up:', error)
-      alert('Error signing up. Please try again.')
+      setMessage('Error signing up. Please try again.')
     }
   }
 
@@ -66,6 +66,7 @@ export default function Signup() {
         <button type="submit" className="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600">
           Sign Up
         </button>
+        {message && <p className="mt-4 text-center">{message}</p>}
       </form>
     </div>
   )

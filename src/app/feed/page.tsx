@@ -30,14 +30,10 @@ export default function FeedPage() {
     fetchTweets()
   }, [dispatch])
 
-  if (!user) {
-    return <div className="text-center mt-8">Please log in to view the feed.</div>
-  }
-
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">Your Feed</h1>
-      <TweetForm />
+      <h1 className="text-2xl font-bold mb-4">Tweet Feed</h1>
+      {user ? <TweetForm /> : <p className="mb-4">Log in to post tweets.</p>}
       <TweetList />
     </div>
   )

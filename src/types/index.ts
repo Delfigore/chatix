@@ -5,6 +5,10 @@ export interface Tweet {
   created_at: string;
   likes: number;
   retweets: number;
+  image_url?: string;
+  youtube_url?: string;
+  twitch_url?: string;
+  link_url?: string;
 }
 
 export interface User {

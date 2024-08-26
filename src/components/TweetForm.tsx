@@ -4,12 +4,16 @@ import { supabase } from '@/lib/supabase'
 import { addTweet } from '@/store/slices/tweetSlice'
 import { RootState } from '@/store/store'
 import * as Avatar from '@radix-ui/react-avatar'
-import { Image, Smile, MapPin, AlertCircle, Loader2 } from 'lucide-react'
+import { Image, Smile, MapPin, AlertCircle, Loader2, Youtube, Twitch, Link } from 'lucide-react'
 
 const MAX_TWEET_LENGTH = 280
 
 export default function TweetForm() {
   const [content, setContent] = useState('')
+  const [imageUrl, setImageUrl] = useState('')
+  const [youtubeUrl, setYoutubeUrl] = useState('')
+  const [twitchUrl, setTwitchUrl] = useState('')
+  const [linkUrl, setLinkUrl] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const dispatch = useDispatch()
@@ -24,18 +28,29 @@ export default function TweetForm() {
     try {
       const { data, error } = await supabase
         .from('tweets')
-        .insert({ content: content.trim(), user_id: user?.id })
+        .insert({
+          content: content.trim(),
+          user_id: user?.id,
+          image_url: imageUrl,
+          youtube_url: youtubeUrl,
+          twitch_url: twitchUrl,
+          link_url: linkUrl,
+        })
         .select()
       if (error) throw error
       dispatch(addTweet(data[0]))
       setContent('')
+      setImageUrl('')
+      setYoutubeUrl('')
+      setTwitchUrl('')
+      setLinkUrl('')
     } catch (error) {
       console.error('Error creating tweet:', error)
       setError('Failed to post tweet. Please try again.')
     } finally {
       setIsLoading(false)
     }
-  }, [content, isLoading, user, dispatch])
+  }, [content, imageUrl, youtubeUrl, twitchUrl, linkUrl, isLoading, user, dispatch])
 
   const handleContentChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value.slice(0, MAX_TWEET_LENGTH))
@@ -82,16 +97,72 @@ export default function TweetForm() {
             className="w-full p-2 resize-none border-none focus:outline-none text-lg"
             rows={3}
           />
+          <div className="flex flex-wrap gap-2 mt-2">
+            {imageUrl && (
+              <div className="relative">
+                <img src={imageUrl} alt="Uploaded" className="w-20 h-20 object-cover rounded" />
+                <button
+                  type="button"
+                  onClick={() => setImageUrl('')}
+                  className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1"
+                >
+                  &times;
+                </button>
+              </div>
+            )}
+            {youtubeUrl && (
+              <div className="relative">
+                <Youtube size={20} className="text-red-500" />
+                <span className="ml-1">{new URL(youtubeUrl).pathname}</span>
+                <button
+                  type="button"
+                  onClick={() => setYoutubeUrl('')}
+                  className="ml-2 text-red-500"
+                >
+                  &times;
+                </button>
+              </div>
+            )}
+            {twitchUrl && (
+              <div className="relative">
+                <Twitch size={20} className="text-purple-500" />
+                <span className="ml-1">{new URL(twitchUrl).pathname}</span>
+                <button
+                  type="button"
+                  onClick={() => setTwitchUrl('')}
+                  className="ml-2 text-red-500"
+                >
+                  &times;
+                </button>
+              </div>
+            )}
+            {linkUrl && (
+              <div className="relative">
+                <Link size={20} className="text-blue-500" />
+                <span className="ml-1">{new URL(linkUrl).hostname}</span>
+                <button
+                  type="button"
+                  onClick={() => setLinkUrl('')}
+                  className="ml-2 text-red-500"
+                >
+                  &times;
+                </button>
+              </div>
+            )}
+          </div>
           <div className="flex justify-between items-center mt-2">
             <div className="flex space-x-2">
-              <button type="button" className="text-primary hover:bg-primary/10 p-2 rounded-full transition-colors duration-200">
+              <button type="button" onClick={() => setImageUrl(prompt('Enter image URL:') || '')} className="text-primary hover:bg-primary/10 p-2 rounded-full transition-colors duration-200">
                 <Image size={20} aria-label="Add image" />
               </button>
-              <button type="button" className="text-primary hover:bg-primary/10 p-2 rounded-full transition-colors duration-200">
-                <Smile size={20} aria-label="Add emoji" />
+              <button type="button" onClick={() => setYoutubeUrl(prompt('Enter YouTube URL:') || '')} className="text-primary hover:bg-primary/10 p-2 rounded-full transition-colors duration-200">
+                <Youtube size={20} aria-label="Add YouTube video" />
               </button>
-              <button type="button" className="text-primary hover:bg-primary/10 p-2 rounded-full transition-colors duration-200">
-                <MapPin size={20} aria-label="Add location" />
+              <button type="button" onClick={() => setTwitchUrl(prompt('Enter Twitch URL:') || '')} className="text-primary hover:bg-primary/10 p-2 rounded-full transition-colors duration-200">
+                <Twitch size={20} aria-label="Add Twitch stream" />
+              </button>
+              <button type="button" onClick={() => setLinkUrl(prompt('Enter link URL:') || '')} className="text-primary hover:bg-primary/10 p-2 rounded-full transition-colors duration-200">
+                <Link size={20} aria-label="Add safe link" />
               </button>
             </div>
             <div className="flex items-center space-x-3">

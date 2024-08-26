@@ -75,6 +75,48 @@ export default function Tweet({ tweet }: TweetProps) {
     }
   }
 
+  const renderMedia = () => {
+    if (tweet.image_url) {
+      return (
+        <img src={tweet.image_url} alt="Tweet image" className="mt-2 rounded-lg max-h-96 w-full object-cover" />
+      )
+    }
+    if (tweet.youtube_url) {
+      const videoId = new URL(tweet.youtube_url).searchParams.get('v')
+      return (
+        <iframe
+          className="mt-2 rounded-lg w-full aspect-video"
+          src={`https://www.youtube.com/embed/${videoId}`}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        ></iframe>
+      )
+    }
+    if (tweet.twitch_url) {
+      const channelName = new URL(tweet.twitch_url).pathname.split('/')[1]
+      return (
+        <iframe
+          className="mt-2 rounded-lg w-full aspect-video"
+          src={`https://player.twitch.tv/?channel=${channelName}&parent=${window.location.hostname}`}
+          allowFullScreen
+        ></iframe>
+      )
+    }
+    if (tweet.link_url) {
+      return (
+        <a
+          href={tweet.link_url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-2 block text-blue-500 hover:underline"
+        >
+          {tweet.link_url}
+        </a>
+      )
+    }
+    return null
+  }
+
   return (
     <div className="border p-4 rounded">
       <div className="flex items-start space-x-3">
@@ -91,6 +133,7 @@ export default function Tweet({ tweet }: TweetProps) {
         <div className="flex-grow">
           <p className="font-semibold">{user?.user_metadata.full_name || "User"}</p>
           <p>{tweet.content}</p>
+          {renderMedia()}
           <div className="mt-2 text-sm text-gray-500">
             <span>{new Date(tweet.created_at).toLocaleString()}</span>
           </div>
