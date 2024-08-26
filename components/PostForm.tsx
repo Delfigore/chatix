@@ -1,12 +1,19 @@
 import { useState } from 'react'
-import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar'
+import { Avatar, AvatarImage, AvatarFallback } from '../components/ui/avatar'
 
 export default function PostForm() {
   const [content, setContent] = useState('')
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle post submission here
+    if (content.trim().length === 0) {
+      alert('Post content cannot be empty.');
+      return;
+    }
+    if (content.length > 280) {
+      alert('Post content exceeds 280 characters.');
+      return;
+    }
     console.log('Post submitted:', content)
     setContent('')
   }
