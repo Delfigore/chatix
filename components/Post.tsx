@@ -31,10 +31,6 @@ export default function Post({ user, content, timestamp }: PostProps) {
               <MessageSquare size={20} />
               <span>Reply</span>
             </button>
-            <button className="flex items-center space-x-2 hover:text-blue-500">
-              <Share size={20} />
-              <span>Share</span>
-            </button>
             <button className="flex items-center space-x-2 hover:text-green-500">
               <Repeat2 size={20} />
               <span>Repost</span>
