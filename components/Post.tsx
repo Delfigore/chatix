@@ -1,4 +1,4 @@
-import { Avatar, AvatarImage, AvatarFallback } from '../components/ui/avatar'
+import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar'
 import { MessageSquare, Repeat2, Heart, Share } from 'lucide-react'
 
 interface PostProps {
