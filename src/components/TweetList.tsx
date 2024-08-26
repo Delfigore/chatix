@@ -1,23 +1,62 @@
 'use client'
 
-import { useSelector } from 'react-redux'
+import { useEffect, useCallback } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '@/store/store'
+import { supabase } from '@/lib/supabase'
+import { addTweet, updateTweet, removeTweet } from '@/store/slices/tweetSlice'
+import Tweet from './Tweet'
+import { Tweet as TweetType } from '@/types'
 
 export default function TweetList() {
   const tweets = useSelector((state: RootState) => state.tweets.tweets)
+  const dispatch = useDispatch()
+
+  const handleRealTimeChanges = useCallback((payload: any) => {
+    if (payload.eventType === 'INSERT') {
+      const sanitizedTweet = {
+        ...payload.new,
+        content: sanitizeContent(payload.new.content)
+      }
+      dispatch(addTweet(sanitizedTweet))
+    } else if (payload.eventType === 'UPDATE') {
+      const sanitizedTweet = {
+        ...payload.new,
+        content: sanitizeContent(payload.new.content)
+      }
+      dispatch(updateTweet(sanitizedTweet))
+    } else if (payload.eventType === 'DELETE') {
+      if (typeof payload.old.id === 'string' && payload.old.id.trim() !== '') {
+        dispatch(removeTweet(payload.old.id))
+      }
+    }
+  }, [dispatch])
+
+  useEffect(() => {
+    const channel = supabase.channel('public:tweets')
+
+    channel
+      .on('broadcast', { event: '*' }, handleRealTimeChanges)
+      .subscribe()
+
+    return () => {
+      channel.unsubscribe()
+    }
+  }, [handleRealTimeChanges])
+
+  // Function to sanitize content (basic example)
+  const sanitizeContent = (content: string): string => {
+    // Remove potential XSS vectors
+    return content.replace(/<[^>]*>/g, '')
+  }
 
   return (
-    <div className="space-y-4">
+    <ul className="space-y-4">
       {tweets.map((tweet) => (
-        <div key={tweet.id} className="border p-4 rounded">
-          <p>{tweet.content}</p>
-          <div className="mt-2 text-sm text-gray-500">
-            <span>{new Date(tweet.created_at).toLocaleString()}</span>
-            <span className="ml-4">Likes: {tweet.likes}</span>
-            <span className="ml-4">Retweets: {tweet.retweets}</span>
-          </div>
-        </div>
+        <li key={tweet.id}>
+          <Tweet tweet={tweet} />
+        </li>
       ))}
-    </div>
+    </ul>
   )
 }
