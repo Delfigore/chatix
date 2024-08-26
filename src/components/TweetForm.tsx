@@ -62,7 +62,7 @@ export default function TweetForm() {
       <Avatar.Image
         className="h-full w-full rounded-full object-cover"
         src={user?.user_metadata.avatar_url || "https://github.com/shadcn.png"}
-        alt={user?.user_metadata.full_name || "User avatar"}
+        alt={`Avatar of ${user?.user_metadata.full_name || "User"}`}
       />
       <Avatar.Fallback className="text-gray-900 leading-1 flex h-full w-full items-center justify-center bg-gray-200 text-lg font-medium">
         {(user?.user_metadata.full_name || "User")[0].toUpperCase()}
@@ -85,13 +85,13 @@ export default function TweetForm() {
           <div className="flex justify-between items-center mt-2">
             <div className="flex space-x-2">
               <button type="button" className="text-primary hover:bg-primary/10 p-2 rounded-full transition-colors duration-200">
-                <Image size={20} />
+                <Image size={20} aria-label="Add image" />
               </button>
               <button type="button" className="text-primary hover:bg-primary/10 p-2 rounded-full transition-colors duration-200">
-                <Smile size={20} />
+                <Smile size={20} aria-label="Add emoji" />
               </button>
               <button type="button" className="text-primary hover:bg-primary/10 p-2 rounded-full transition-colors duration-200">
-                <MapPin size={20} />
+                <MapPin size={20} aria-label="Add location" />
               </button>
             </div>
             <div className="flex items-center space-x-3">
@@ -104,7 +104,7 @@ export default function TweetForm() {
                 className={`px-4 py-2 rounded-full text-white font-bold transition-colors duration-200 ${submitButtonClass}`}
               >
                 {isLoading ? (
-                  <Loader2 size={20} className="animate-spin" />
+                  <Loader2 size={20} className="animate-spin" aria-label="Loading" />
                 ) : (
                   'Tweet'
                 )}
@@ -115,7 +115,7 @@ export default function TweetForm() {
       </div>
       {error && (
         <div className="mt-2 text-red-500 flex items-center">
-          <AlertCircle size={16} className="mr-1" />
+          <AlertCircle size={16} className="mr-1" aria-hidden="true" />
           <span>{error}</span>
         </div>
       )}

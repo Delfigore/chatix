@@ -21,19 +21,25 @@ const TrendingSection: React.FC<TrendingSectionProps> = ({ trendingTopics = defa
   const memoizedTopics = useMemo(() => trendingTopics, [trendingTopics]);
 
   return (
-    <div className={cn("bg-gray-50 rounded-lg p-4")}>
-      <h2 className={cn("text-xl font-bold mb-4")}>Trending</h2>
-      <ul>
+    <section className={cn("bg-gray-50 rounded-lg p-4")} aria-labelledby="trending-section-title">
+      <h2 id="trending-section-title" className={cn("text-xl font-bold mb-4")}>Trending</h2>
+      <ul className="space-y-2">
         {memoizedTopics.map((topic) => (
-          <li key={topic.id} className={cn("mb-3")}>
-            <a href="#" className={cn("block hover:bg-gray-100 p-2 rounded")}>
+          <li key={topic.id}>
+            <a 
+              href="#" 
+              className={cn(
+                "block hover:bg-gray-100 p-2 rounded transition-colors duration-200",
+                "focus:outline-none focus:ring-2 focus:ring-blue-500"
+              )}
+            >
               <div className={cn("font-semibold")}>{topic.name}</div>
               <div className={cn("text-sm text-gray-500")}>{topic.tweets} Tweets</div>
             </a>
           </li>
         ))}
       </ul>
-    </div>
+    </section>
   );
 };
 

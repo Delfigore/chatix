@@ -9,11 +9,15 @@ import ErrorBoundary from '@/components/ErrorBoundary'
 const inter = Inter({ subsets: ['latin'] })
 
 const Navigation = dynamic(() => import('@/components/Navigation'), {
-  loading: () => <p>Loading...</p>,
+  loading: () => <p>Loading navigation...</p>,
 })
 
 const TrendingSection = dynamic(() => import('@/components/TrendingSection'), {
   loading: () => <p>Loading trending...</p>,
+})
+
+const SearchBar = dynamic(() => import('@/components/SearchBar'), {
+  loading: () => <p>Loading search...</p>,
 })
 
 export const metadata = {
@@ -24,7 +28,7 @@ export const metadata = {
 function Loading() {
   return (
     <div className="flex justify-center items-center h-screen" aria-label="Loading">
-      <Image src="/logo.jpg" alt="Logo" width={100} height={100} priority />
+      <Image src="/logo.jpg" alt="Chatix Logo" width={100} height={100} priority />
     </div>
   )
 }
@@ -42,10 +46,10 @@ export default function RootLayout({
       <body className={`${inter.className} bg-white min-h-screen`}>
         <Providers>
           <ErrorBoundary>
-            <div className="flex min-h-screen">
+            <div className="flex flex-col md:flex-row min-h-screen">
               {/* Left sidebar */}
-              <aside className="w-64 border-r border-gray-200" aria-label="Sidebar navigation">
-                <div className="fixed h-screen p-4">
+              <aside className="w-full md:w-64 border-b md:border-r border-gray-200" aria-label="Sidebar navigation">
+                <div className="md:fixed md:h-screen p-4">
                   <div className="mb-4">
                     <h1 className="text-2xl font-bold">Chatix</h1>
                   </div>
@@ -56,7 +60,7 @@ export default function RootLayout({
               </aside>
 
               {/* Main content */}
-              <main className="flex-1 border-r border-gray-200">
+              <main className="flex-1 border-b md:border-r border-gray-200">
                 <div className="max-w-2xl mx-auto px-4 py-4">
                   <Suspense fallback={<Loading />}>
                     {children}
@@ -65,13 +69,11 @@ export default function RootLayout({
               </main>
 
               {/* Right sidebar */}
-              <aside className="w-80 p-4">
+              <aside className="w-full md:w-80 p-4">
                 <div className="mb-4">
-                  <input
-                    type="text"
-                    placeholder="Search Chatix"
-                    className="w-full px-4 py-2 rounded-full bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
+                  <Suspense fallback={<p>Loading search...</p>}>
+                    <SearchBar />
+                  </Suspense>
                 </div>
                 <Suspense fallback={<p>Loading trending...</p>}>
                   <TrendingSection />
