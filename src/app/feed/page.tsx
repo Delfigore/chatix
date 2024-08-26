@@ -21,7 +21,7 @@ export default function FeedPage() {
         .limit(50)
 
       if (error) {
-        console.error('Error fetching tweets:', error)
+        alert('Failed to fetch tweets. Please try again later.');
       } else {
         dispatch(setTweets(data))
       }
